@@ -33,9 +33,8 @@ size = Vector3(100, 4, 100)
 multimesh = ExtResource("2_xf44w")
 blueprint = ExtResource("3_n4834")
 color_to_place_on = Color(1, 0, 0, 1)
-local_transform_offset = Vector3(-100, 0, -162.18)
+local_transform_offset = Vector3(-100, 0, -157.225)
 local_scale_transform_adjustment = 0.5
-local_rotation_axis = Vector3(1, 1, 0)
 shape = SubResource("BoxShape3D_c4278")
 
 [node name="Trees" parent="." instance=ExtResource("1_1r6ds")]

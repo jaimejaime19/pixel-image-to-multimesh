@@ -50,9 +50,10 @@ class_name PixelImageToMultiMesh
 	set(value):
 		local_y_transform_random_range = value
 		create_blueprint(blueprint)
+
 @export_subgroup("Scaling")
 ## The number to scale the transform vectors by.
-## This is useful when your mesh is not a standard 1m cube.
+## This is useful when your mesh is larger than a 1m cube.
 @export var transform_scale: float = 1.0: 
 	set(value):
 		transform_scale = value
@@ -62,10 +63,11 @@ class_name PixelImageToMultiMesh
 	set(value):
 		local_scale_random_range = value
 		create_blueprint(blueprint)
-## This value is the length of the line on a given axis that crosses the center
+## This value is HALF the length of the line on a given axis that crosses the center
 ## of the mesh, as well as crossing opposite-facing ends of a mesh. 
 ## In the case of a 1m cube to be scaled on the y-axis, 
-## this is a vertical 1m line through the cube's center.
+## a vertical 1m line through the cube's center is created.
+## The value should be set to 0.5
 ## What this value allows us to do is scale the mesh without crossing the
 ## 'invisible' end of a line that acts like an origin point or center.
 ## When 0, no adjustment is done.
@@ -78,8 +80,6 @@ class_name PixelImageToMultiMesh
 	set(value):
 		local_scale_transform_adjustment_axis = value
 		create_blueprint(blueprint)
-
-
 
 @export_group("Local Rotation")
 ## The random range which to locally rotate a mesh by.
@@ -168,37 +168,29 @@ func place_mesh(px, py, transform_array):
 					local_z_transform_random_range.x, 
 					local_z_transform_random_range.y
 					) + local_transform_offset.z 
-				) * transform_scale)
+				) * transform_scale
+			)
 		var local_scale_value: float = randf_range(local_scale_random_range.x, local_scale_random_range.y)
 		new_transform = new_transform.scaled_local(
 			Vector3(local_scale_value, local_scale_value, local_scale_value)
 			)
-		var normalized_local_scale_transform_adjustment_axis: Vector3 = local_scale_transform_adjustment_axis.normalized()
-		#new_transform = new_transform.translated_local(Vector3(
-			#(local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * local_scale_value),
-			#(local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * local_scale_value), 
-			#(local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * local_scale_value)
-			#))
 		new_transform = new_transform.translated_local(Vector3(
 			local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value,
 			local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value,
 			local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value
-		))
-		
-		#local_scale_transform_adjustment_axis.y * (new_transform.origin.y - (new_transform.origin.y * local_scale_value) - (local_scale_transform_adjustment * (local_scale_value - 1)))
-		
+			))
 		new_transform = new_transform.rotated(
 			axis_rotation_axis.normalized(), 
 			deg_to_rad(randf_range(
 				axis_rotation_random_range.x, 
 				axis_rotation_random_range.y
-				)))
+			)))
 		new_transform = new_transform.rotated_local(
 			local_rotation_axis.normalized(), 
 			deg_to_rad(randf_range(
 				local_rotation_random_range.x, 
 				local_rotation_random_range.y
-				)))
+			)))
 		# Based on the above, the transform is a combination of
 		# translation + axis rotation + local rotation
 		transform_array.append(new_transform)
