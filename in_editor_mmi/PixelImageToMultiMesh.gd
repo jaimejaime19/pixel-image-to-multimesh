@@ -6,115 +6,93 @@ class_name PixelImageToMultiMesh
 
 @export var regenerate_blueprint: bool = false:
 	set(value):
-		print("path testing regen")
 		regenerate_blueprint = false
-		attempt_blueprint(blueprint)
+		create_blueprint(blueprint)
 @export var blueprint: Image
+## Color to place blueprint's meshes on.
 @export var color_to_place_on: Color = Color8(0, 0, 0)
 ## Amount of layers to replicate this blueprint on.
-@export var height: int = 1: set = set_height
-@export var transform_vector_multiplier: float = 1.0: 
-	set = set_transform_vector_multiplier
+@export var height: int = 1: 
+	set(value):
+		height = value
+		create_blueprint(blueprint)
+## The number to multiply the transform vectors by.
+## This is useful when your mesh is not a standard 1m cube.
+@export var transform_multiplier: float = 1.0: 
+	set(value):
+		transform_multiplier = value
+		create_blueprint(blueprint)
 
 @export_group("Local Rotation")
+## The random range which to locally rotate a mesh by.
 @export var local_random_rotate_range: Vector2 = Vector2(0, 0):
 	set(value):
-		print("path testing local rrr")
 		local_random_rotate_range = value
-		attempt_blueprint(blueprint)
-@export var local_rotation_axis: Vector3 = Vector3(0, 1, 0)
+		create_blueprint(blueprint)
+## The axis on which the local rotation occurs on. 
+## Vector3(0, 0, 0) is not allowed.
+## By default, this is the Y axis (vertical line).
+@export var local_rotation_axis: Vector3 = Vector3(0, 1, 0):
+	set(value):
+		local_rotation_axis = value
+		create_blueprint(blueprint)
 
 @export_group("Axis Rotation")
+## The random range which to rotate the multimesh around the axis by.
 @export var axis_random_rotate_range: Vector2 = Vector2(0, 0):
 	set(value):
-		print("path testing axis rrr")
 		axis_random_rotate_range = value
-		attempt_blueprint(blueprint)
-@export var axis_rotation_axis: Vector3 = Vector3(0, 1, 0)
+		create_blueprint(blueprint)
+## The axis on which the axis rotation occurs on.
+## Vector3(0, 0, 0) is not allowed.
+## By default, this is the Y axis (vertical line).
+@export var axis_rotation_axis: Vector3 = Vector3(0, 1, 0):
+	set(value):
+		axis_rotation_axis = value
+		create_blueprint(blueprint)
 
 @export_group("Collision")
+## Clears the collision shapes from the multimesh's static body.
 @export var clear_collision_shapes: bool = false:
 	set(value):
-		print("path testing clear button")
 		clear_collision_shapes = false
 		clear_collisions()
+## If enabled, adds a collision shape to each mesh.
 @export var add_collision: bool = false
+## The collision shape to add to each mesh.
 @export var shape: Shape3D
-
-func _enter_tree():
-	print("I ENTERED: IAMAGE IS " + str(blueprint))
 
 func _ready():
 	print("Generating blueprint...")
 	regenerate_blueprint = true
 
-func set_height(value: int) -> void:
-	print("path testing h")
-	if not Engine.is_editor_hint():
-		return
-	height = value
-	attempt_blueprint(blueprint)
-
-func set_transform_vector_multiplier(value: float) -> void:
-	print("path testing tvm")
-	print("BLUEPRINT IN TVM IS: " + str(blueprint))
-	if not Engine.is_editor_hint():
-		return
-	transform_vector_multiplier = value
-	attempt_blueprint(blueprint)
-
-func attempt_blueprint(value: Image) -> void:
-	if not is_inside_tree():
-		print("NOT IN TREE image = " + str(value))
-		return
-	set_blueprint(value)
-
-func set_blueprint(value: Image) -> void:
-	if not is_inside_tree():
-		print("NOT IN TREE image = " + str(value))
-		return
-	print("path testing: image = " + str(value))
-	if value == null:
-		print("WOOPSIE VALLUE IS NULL")
-	else:
-		print("OKAY IMAGE IS REALLL")
-	print("IMAGE SIZE = " + str(value.get_size()))
-	if not Engine.is_editor_hint():
-		print("NOT ENGIE HINT")
-		return
+func create_blueprint(value: Image) -> void:
 	if not perform_checks():
-		print("FAILED CHECK: image is " + str(value))
 		return
 	clear_collisions()
-	if (is_instance_valid(value)):
-		#print("CANCELLED OPERATION OF BLUEPRINT")
-		#return
-		pass
-	print("IMAGE SIZE = " + str(value.get_size()))
 	blueprint = value
 	
-	print("the value of blueprint will be: " + str(value))
-	
-	var transforms: Array = Array()
+	var transform_array: Array = Array()
 	var blueprint_size: Vector2 = blueprint.get_size()
 	
 	for py in range(blueprint_size[1]):
 		for px in range(blueprint_size[0]):
 			var pixel: Color = blueprint.get_pixel(px, py)
 			if (pixel == color_to_place_on):
-				place_mesh(px, py, transforms)
+				place_mesh(px, py, transform_array)
 	
-	multimesh.instance_count = transforms.size()
+	multimesh.instance_count = transform_array.size()
 	for i in range(multimesh.instance_count):
-		multimesh.set_instance_transform(i, transforms[i])
+		multimesh.set_instance_transform(i, transform_array[i])
 	
 	print("Collision shape count: " + str(static_body.get_child_count()))
 
-func place_mesh(px, py, tfs):
+## Place a single mesh for each height layer.
+func place_mesh(px, py, transform_array):
 	for h in range(height):
 		var new_transform: Transform3D = Transform3D()
 		new_transform = new_transform.translated(
-			Vector3(px, h, py) * transform_vector_multiplier)
+			Vector3(px, h, py) * transform_multiplier)
 		new_transform = new_transform.rotated(
 			axis_rotation_axis.normalized(), 
 			deg_to_rad(randf_range(
@@ -127,19 +105,30 @@ func place_mesh(px, py, tfs):
 				local_random_rotate_range.x, 
 				local_random_rotate_range.y
 				)))
-		tfs.append(new_transform)
+		# Based on the above, the transform is a combination of
+		# translation + axis rotation + local rotation
+		transform_array.append(new_transform)
 		
-		# Add static body here
+		if not add_collision:
+			continue
+		
+		# Add collision shape for this mesh
 		var new_collision_shape: CollisionShape3D = CollisionShape3D.new()
 		new_collision_shape.transform = new_transform
 		new_collision_shape.shape = shape
 		static_body.add_child(new_collision_shape)
-		new_collision_shape.owner = static_body
+		new_collision_shape.owner = owner # or get_parent, depends... maybe?
 
+# These checks prevent re-creation of the blueprint in cretain cases.
 func perform_checks() -> bool:
-	print("path testing perform checks")
+	if not Engine.is_editor_hint():
+		print("The Engine is not in editor mode. NOT AN ERROR")
+		return false
+	if not is_inside_tree():
+		printerr("Multimeshinstance node is not in tree!")
+		return false
 	if not static_body:
-		print("STATIC BODY FAILED")
+		printerr("Static body node does not exist!")
 		return false
 	if axis_rotation_axis == Vector3(0, 0, 0):
 		printerr("Axis of rotation cannot be (0, 0, 0)!")
@@ -151,7 +140,6 @@ func perform_checks() -> bool:
 	return true
 
 func clear_collisions() -> void:
-	print("path testing clear func")
 	if not static_body:
 		return
 	for collision_shape in static_body.get_children():
