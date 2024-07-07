@@ -1,6 +1,14 @@
 @tool
 extends MultiMeshInstance3D
 class_name PixelImageToMultiMesh
+## How to use
+## 1. Drag and drop a PixelImageToMultiMesh node into the scene tree
+## 2. Add an image. Make sure to re-import as Image, not as Texture2D!
+## 3. Set the pixel color to place on
+## 4. Add a blank Multimesh resource to the node by using the inspector 
+## 5. Set the "Transform Format" flag to 3D
+## 6. Add a mesh to the multimesh resource
+## 7. Click on "Regenerate Blueprint" and done!
 
 @onready var static_body: StaticBody3D = $StaticBody3D
 
@@ -63,8 +71,10 @@ class_name PixelImageToMultiMesh
 @export var shape: Shape3D
 
 func _ready():
-	print("Generating blueprint...")
-	regenerate_blueprint = true
+	## Only uncomment the below lines if regenerating in game for some reason.
+	#print("Generating blueprint...")
+	#regenerate_blueprint = true
+	pass
 
 func create_blueprint(value: Image) -> void:
 	if not perform_checks():

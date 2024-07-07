@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://rlx7ju2b36am"]
+
+[ext_resource type="Script" path="res://in_editor_mmi/PixelImageToMultiMesh.gd" id="1_ki5kn"]
+
+[node name="PixelImageToMultiMesh" type="MultiMeshInstance3D"]
+script = ExtResource("1_ki5kn")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
