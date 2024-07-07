@@ -24,18 +24,68 @@ class_name PixelImageToMultiMesh
 	set(value):
 		height = value
 		create_blueprint(blueprint)
-## The number to multiply the transform vectors by.
-## This is useful when your mesh is not a standard 1m cube.
-@export var transform_multiplier: float = 1.0: 
+
+@export_group("Transforms")
+@export_subgroup("Positioning")
+## The transform vector to offset the multimeshinstance placement.
+@export var local_transform_offset: Vector3 = Vector3(0, 0, 0):
 	set(value):
-		transform_multiplier = value
+		local_transform_offset = value
 		create_blueprint(blueprint)
+## The random range to add to the local transform in the x axis.
+## Useful to provide a random positional offset to the mesh.
+@export var local_x_transform_random_range: Vector2 = Vector2(0, 0):
+	set(value):
+		local_x_transform_random_range = value
+		create_blueprint(blueprint)
+## The random range to add to the local transform in the z axis.
+## Useful to provide a random positional offset to the mesh.
+@export var local_z_transform_random_range: Vector2 = Vector2(0, 0):
+	set(value):
+		local_z_transform_random_range = value
+		create_blueprint(blueprint)
+## The random range to add to the local transform in the y axis (height).
+## Useful to provide a random positional offset to the mesh.
+@export var local_y_transform_random_range: Vector2 = Vector2(0, 0):
+	set(value):
+		local_y_transform_random_range = value
+		create_blueprint(blueprint)
+@export_subgroup("Scaling")
+## The number to scale the transform vectors by.
+## This is useful when your mesh is not a standard 1m cube.
+@export var transform_scale: float = 1.0: 
+	set(value):
+		transform_scale = value
+		create_blueprint(blueprint)
+## The random range to scale the mesh by.
+@export var local_scale_random_range: Vector2 = Vector2(1, 1):
+	set(value):
+		local_scale_random_range = value
+		create_blueprint(blueprint)
+## This value is the length of the line on a given axis that crosses the center
+## of the mesh, as well as crossing opposite-facing ends of a mesh. 
+## In the case of a 1m cube to be scaled on the y-axis, 
+## this is a vertical 1m line through the cube's center.
+## What this value allows us to do is scale the mesh without crossing the
+## 'invisible' end of a line that acts like an origin point or center.
+## When 0, no adjustment is done.
+@export var local_scale_transform_adjustment: float = 0.0:
+	set(value):
+		local_scale_transform_adjustment = value
+		create_blueprint(blueprint)
+
+@export var local_scale_transform_adjustment_axis: Vector3 = Vector3(0, 1, 0):
+	set(value):
+		local_scale_transform_adjustment_axis = value
+		create_blueprint(blueprint)
+
+
 
 @export_group("Local Rotation")
 ## The random range which to locally rotate a mesh by.
-@export var local_random_rotate_range: Vector2 = Vector2(0, 0):
+@export var local_rotation_random_range: Vector2 = Vector2(0, 0):
 	set(value):
-		local_random_rotate_range = value
+		local_rotation_random_range = value
 		create_blueprint(blueprint)
 ## The axis on which the local rotation occurs on. 
 ## Vector3(0, 0, 0) is not allowed.
@@ -47,9 +97,9 @@ class_name PixelImageToMultiMesh
 
 @export_group("Axis Rotation")
 ## The random range which to rotate the multimesh around the axis by.
-@export var axis_random_rotate_range: Vector2 = Vector2(0, 0):
+@export var axis_rotation_random_range: Vector2 = Vector2(0, 0):
 	set(value):
-		axis_random_rotate_range = value
+		axis_rotation_random_range = value
 		create_blueprint(blueprint)
 ## The axis on which the axis rotation occurs on.
 ## Vector3(0, 0, 0) is not allowed.
@@ -98,22 +148,56 @@ func create_blueprint(value: Image) -> void:
 	print("Collision shape count: " + str(static_body.get_child_count()))
 
 ## Place a single mesh for each height layer.
+## Since the image pixel coords are tracked using px and py, and adding layers is h,
+## A little clarification is added here.
+## In this function, px is x-axis, py is z-axis, and h is y-axis.
 func place_mesh(px, py, transform_array):
 	for h in range(height):
 		var new_transform: Transform3D = Transform3D()
 		new_transform = new_transform.translated(
-			Vector3(px, h, py) * transform_multiplier)
+			Vector3(
+				px + randf_range(
+					local_x_transform_random_range.x, 
+					local_x_transform_random_range.y
+					) + local_transform_offset.x, 
+				h + randf_range(
+					local_y_transform_random_range.x, 
+					local_y_transform_random_range.y
+					) + local_transform_offset.y , 
+				py + randf_range(
+					local_z_transform_random_range.x, 
+					local_z_transform_random_range.y
+					) + local_transform_offset.z 
+				) * transform_scale)
+		var local_scale_value: float = randf_range(local_scale_random_range.x, local_scale_random_range.y)
+		new_transform = new_transform.scaled_local(
+			Vector3(local_scale_value, local_scale_value, local_scale_value)
+			)
+		var normalized_local_scale_transform_adjustment_axis: Vector3 = local_scale_transform_adjustment_axis.normalized()
+		#new_transform = new_transform.translated_local(Vector3(
+			#(local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * local_scale_value),
+			#(local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * local_scale_value), 
+			#(local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * local_scale_value) - (local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * local_scale_value)
+			#))
+		new_transform = new_transform.translated_local(Vector3(
+			local_scale_transform_adjustment_axis.x * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value,
+			local_scale_transform_adjustment_axis.y * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value,
+			local_scale_transform_adjustment_axis.z * local_scale_transform_adjustment * (local_scale_value - 1) / local_scale_value
+		))
+		
+		#local_scale_transform_adjustment_axis.y * (new_transform.origin.y - (new_transform.origin.y * local_scale_value) - (local_scale_transform_adjustment * (local_scale_value - 1)))
+		
 		new_transform = new_transform.rotated(
 			axis_rotation_axis.normalized(), 
 			deg_to_rad(randf_range(
-				axis_random_rotate_range.x, 
-				axis_random_rotate_range.y
+				axis_rotation_random_range.x, 
+				axis_rotation_random_range.y
 				)))
 		new_transform = new_transform.rotated_local(
 			local_rotation_axis.normalized(), 
 			deg_to_rad(randf_range(
-				local_random_rotate_range.x, 
-				local_random_rotate_range.y
+				local_rotation_random_range.x, 
+				local_rotation_random_range.y
 				)))
 		# Based on the above, the transform is a combination of
 		# translation + axis rotation + local rotation
@@ -135,7 +219,8 @@ func perform_checks() -> bool:
 		print("The Engine is not in editor mode. NOT AN ERROR")
 		return false
 	if not is_inside_tree():
-		printerr("Multimeshinstance node is not in tree!")
+		printerr("Multimeshinstance node is not in tree! Most likely an
+			editor startup issue. If this appears anywhere else, please fix.")
 		return false
 	if not static_body:
 		printerr("Static body node does not exist!")
