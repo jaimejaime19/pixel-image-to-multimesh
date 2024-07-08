@@ -211,7 +211,7 @@ func perform_checks() -> bool:
 		print("The Engine is not in editor mode. NOT AN ERROR")
 		return false
 	if not is_inside_tree():
-		printerr("Multimeshinstance node is not in tree! Most likely an
+		print("Multimeshinstance node is not in tree! Most likely switching scenes or
 			editor startup issue. If this appears anywhere else, please fix.")
 		return false
 	if not static_body:
