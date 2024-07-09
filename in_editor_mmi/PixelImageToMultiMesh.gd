@@ -17,8 +17,9 @@ class_name PixelImageToMultiMesh
 		regenerate_blueprint = false
 		create_blueprint(blueprint)
 @export var blueprint: Image
-## Color to place blueprint's meshes on.
-@export var color_to_place_on: Color = Color8(0, 0, 0)
+## Colors to place blueprint's meshes on.
+## You can put the same color twice to place meshes in the same place twice.
+@export var colors_to_place_on: Array[Color] = [Color8(0, 0, 0)]
 ## Amount of layers to replicate this blueprint on.
 @export var height: int = 1: 
 	set(value):
@@ -138,8 +139,9 @@ func create_blueprint(value: Image) -> void:
 	for py in range(blueprint_size[1]):
 		for px in range(blueprint_size[0]):
 			var pixel: Color = blueprint.get_pixel(px, py)
-			if (pixel == color_to_place_on):
-				place_mesh(px, py, transform_array)
+			for clr in colors_to_place_on:
+				if (pixel == clr):
+					place_mesh(px, py, transform_array)
 	
 	multimesh.instance_count = transform_array.size()
 	for i in range(multimesh.instance_count):
@@ -208,11 +210,13 @@ func place_mesh(px, py, transform_array):
 # These checks prevent re-creation of the blueprint in cretain cases.
 func perform_checks() -> bool:
 	if not Engine.is_editor_hint():
-		print("The Engine is not in editor mode. NOT AN ERROR")
+		## This error appears while running - it is irrelevant.
+		#print("The Engine is not in editor mode. NOT AN ERROR")
 		return false
 	if not is_inside_tree():
-		print("Multimeshinstance node is not in tree! Most likely switching scenes or
-			editor startup issue. If this appears anywhere else, please fix.")
+		## This error appears in editor - it is irrelevant.
+		#print("Multimeshinstance node is not in tree! Most likely switching scenes or
+		#	editor startup issue. If this appears anywhere else, please fix.")
 		return false
 	if not static_body:
 		printerr("Static body node does not exist!")
