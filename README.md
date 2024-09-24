@@ -7,8 +7,6 @@ There are a lot of variables you can change in the inspector like positioning, s
 
 This can be used to prototype levels for a game without needing to place the assets manually, or even going into the editor really. I used it to spawn tons of trees and shrubs on the ground as well as generate walls for a level for this example
 
-Took inspiration from a similar tool I saw online but couldn't find it anymore. Feel free to use this code as I won't be making any changes to it.
-
 Here's an introduction video that shows some of the various functionality of the script.
 
 https://github.com/user-attachments/assets/252225f9-eaab-4fd3-a2d9-7589d52c0818
@@ -17,3 +15,5 @@ If you are interested in collisions, here is another video to show how you can d
 
 https://github.com/user-attachments/assets/8bc0a606-73c3-402a-94f5-5c301f8a6e8e
 
+Took inspiration from a similar tool I saw online but couldn't find it anymore. Feel free to use this code as I won't be making any changes to it.
+(Note: There is a ton of unnecessary stuff in the project, I didn't bother to clean it up.)
