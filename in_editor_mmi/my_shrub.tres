@@ -1,4 +1,4 @@
-[gd_resource type="ArrayMesh" load_steps=3 format=3 uid="uid://clof0sf6rgy6m"]
+[gd_resource type="ArrayMesh" load_steps=3 format=4 uid="uid://clof0sf6rgy6m"]
 
 [ext_resource type="Texture2D" uid="uid://cqb6xp6x7vmpr" path="res://assets/shrubby.png" id="1_e3nhf"]
 
@@ -11,13 +11,13 @@ texture_filter = 0
 [resource]
 _surfaces = [{
 "aabb": AABB(-0.5, -0.5, -0.5, 1, 1, 1),
-"attribute_data": PackedByteArray(0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0),
+"attribute_data": PackedByteArray("AAAAPwAAAD8AAIA/AAAAAAAAAD8AAIA/AAAAAAAAgD8AAIA/AACAPwAAAAAAAAAAAAAAPwAAAAAAAAA/AAAAPwAAgD8AAAAAAAAAPwAAgD8AAAAAAACAPwAAgD8AAIA/AAAAAAAAAAAAAAA/AAAAAA=="),
 "format": 34359742487,
 "index_count": 36,
-"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 2, 0, 3, 0, 0, 0, 1, 0, 4, 0, 2, 0, 0, 0, 3, 0, 5, 0, 6, 0, 1, 0, 0, 0, 0, 0, 5, 0, 6, 0, 7, 0, 8, 0, 9, 0, 9, 0, 10, 0, 7, 0, 8, 0, 11, 0, 9, 0, 7, 0, 10, 0, 12, 0, 13, 0, 8, 0, 7, 0, 7, 0, 12, 0, 13, 0),
+"index_data": PackedByteArray("AAABAAIAAgADAAAAAQAEAAIAAAADAAUABgABAAAAAAAFAAYABwAIAAkACQAKAAcACAALAAkABwAKAAwADQAIAAcABwAMAA0A"),
 "material": SubResource("StandardMaterial3D_fwf5q"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 14,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 189, 187, 178, 0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 0, 48, 189, 187, 50, 0, 0, 0, 191, 0, 0, 0, 63, 46, 189, 187, 178, 0, 0, 0, 191, 0, 0, 0, 191, 46, 189, 187, 50, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255, 255, 255, 0, 128, 255, 255, 255, 255)
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAAAAAAAAPwAAAD8AAAAAAAAAAAAAAL8AAAAAAAAAvwAAAL8AAAAAAAAAPwAAAL8AAAAAAAAAvwAAAD8AAAAAAAAAAAAAAD8AAAAAAAAAAAAAAAAAAAAALr27sgAAAD8AAAC/AAAAAAAAAL8AAAAAML27MgAAAL8AAAA/Lr27sgAAAL8AAAC/Lr27MgAAAD8AAAA/AAAAAAAAAD8AAAAA/3//f////7//f/9/////v/9//3////+//3//f////7//f/9/////v/9//3////+//3//f////7///wCA////////AID///////8AgP///////wCA////////AID///////8AgP///////wCA/////w==")
 }]

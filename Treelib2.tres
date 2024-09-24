@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=6 format=3 uid="uid://ddl2undv0eepw"]
 
-[ext_resource type="Texture2D" uid="uid://jmvub20ig43a" path="res://assets/tree.png" id="1_j1myc"]
+[ext_resource type="Texture2D" uid="uid://jmvub20ig43a" path="res://assets/treeidk.png" id="1_j1myc"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ib8qq"]
 transparency = 3

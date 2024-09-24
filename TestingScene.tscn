@@ -1,6 +1,6 @@
-[gd_scene load_steps=12 format=3 uid="uid://8bt86y7kp7bl"]
+[gd_scene load_steps=12 format=4 uid="uid://8bt86y7kp7bl"]
 
-[ext_resource type="Texture2D" uid="uid://jmvub20ig43a" path="res://assets/tree.png" id="1_lrfi3"]
+[ext_resource type="Texture2D" uid="uid://jmvub20ig43a" path="res://assets/treeidk.png" id="1_lrfi3"]
 [ext_resource type="PackedScene" uid="uid://cvyvrarp7uen7" path="res://cooltree.tscn" id="2_844ax"]
 [ext_resource type="MeshLibrary" uid="uid://hstpkcwnjgh5" path="res://COOLTREEML.tres" id="2_rw2cu"]
 [ext_resource type="Script" path="res://GMap.gd" id="3_qv84x"]
@@ -24,15 +24,15 @@ center_offset = Vector3(-0.075, 0, 0)
 [sub_resource type="ArrayMesh" id="ArrayMesh_47m3u"]
 _surfaces = [{
 "aabb": AABB(-0.5, -0.5, 0, 1.00001, 1, 1e-05),
-"attribute_data": PackedByteArray(0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 128, 63, 0, 0, 128, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAAAA="),
 "format": 34359742487,
 "index_count": 6,
-"index_data": PackedByteArray(0, 0, 1, 0, 2, 0, 1, 0, 3, 0, 2, 0),
+"index_data": PackedByteArray("AAABAAIAAQADAAIA"),
 "material": SubResource("StandardMaterial3D_ib8qq"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 4,
-"vertex_data": PackedByteArray(0, 0, 0, 63, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 191, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 0, 63, 0, 0, 0, 0, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191, 255, 127, 255, 127, 255, 255, 255, 191)
+"vertex_data": PackedByteArray("AAAAPwAAAL8AAAAAAAAAvwAAAL8AAAAAAAAAPwAAAD8AAAAAAAAAvwAAAD8AAAAA/3//f////7//f/9/////v/9//3////+//3//f////78=")
 }]
 
 [sub_resource type="QuadMesh" id="QuadMesh_11o1p"]
